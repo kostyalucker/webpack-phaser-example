@@ -1,0 +1,91 @@
+@import "variables";
+@import "mixins";
+
+//font rems
+@function rem($target, $context: $font-size) {
+  @if $target == 0 {
+    @return 0
+  }
+  @return $target / $context + 0rem
+}
+
+// percent function
+@function cp($target, $container) {
+  @return ($target/$container) * 100%;
+}
+
+//colors object
+
+//$colors: (
+//        red: lightcoral,
+//        green: lightgreen,
+//        blue: lightblue
+//);
+//
+//@each $name, $value in $colors {
+//  .#{$name}-block {
+//  background: #{$value}
+//}
+//}
+
+body {
+  background: #222;
+  font-family: $font-primary;
+}
+
+h1 {
+  color: $font-color;
+}
+
+.red-block, .green-block, .blue-block {
+  padding: 20px;
+}
+
+.block {
+  background: #fff;
+  padding: rem(20px);
+  width: 300px;
+  margin: 40px auto;
+
+  &.prime {
+    background: #3ebf59;
+  }
+
+  p {
+    width: cp(82px, 300px);
+    background: #cccccc;
+    padding: 5px;
+    margin: 0;
+    a {
+      color: #fff;
+    }
+  }
+
+  @include medium-up {
+    width: 600px;
+  }
+
+  @include large-up {
+    width: 1000px;
+  }
+}
+
+@mixin message($background) {
+    width: 120px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    color: #ccc;
+    background: $background;
+}
+
+.alert {
+  @include message(lightblue)
+}
+
+.error {
+  @include message(lightgreen)
+}
+
+.warning {
+  @include message(lightcoral)
+}
