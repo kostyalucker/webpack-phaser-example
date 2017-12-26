@@ -1,4 +1,6 @@
 const path = require('path');
+let webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 var phaserModule = path.join(__dirname, '/node_modules/phaser-ce/');
 var phaser = path.join(phaserModule, 'build/custom/phaser-split.js');
@@ -19,10 +21,22 @@ module.exports = {
     },
     module: {
         rules: [
-            { test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
-            { test: /pixi\.js/, use: ['expose-loader?PIXI'] },
-            { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
-            { test: /p2\.js/, use: ['expose-loader?p2'] }
+            {test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src')},
+            {test: /pixi\.js/, use: ['expose-loader?PIXI']},
+            {test: /phaser-split\.js$/, use: ['expose-loader?Phaser']},
+            {test: /p2\.js/, use: ['expose-loader?p2']},
+            {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
+            {
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ]
+            },
+            {
+                test: /\.scss$/,
+                use: ['style-loader','css-loader','sass-loader']
+            }
         ]
     },
     resolve: {
@@ -32,6 +46,7 @@ module.exports = {
             'p2': p2
         }
     },
+    plugins: [],
 
     /**
      * Minimal development setup.
@@ -46,3 +61,9 @@ module.exports = {
     }
 
 };
+
+if (process.env.NODE_ENV === 'production') {
+    module.exports.plugins.push(
+        new UglifyJsPlugin()
+    )
+}
